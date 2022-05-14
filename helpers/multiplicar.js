@@ -1,28 +1,24 @@
 // Incorporando filesystem
 const fs = require('fs')
+const colors = require('colors/safe')
 
 
-const crearArchivo = async( base = 5) => {
+const crearArchivo = async( base = 5, listar = false, hasta = 10) => {
     let salida = '';
 
-    console.log('===========================')
-    console.log(`  Creando la tabla del: ${base}`)
-    console.log('===========================')
-
-    for (let i = 1; i <= 10; i++) {
-        salida += `${base} x ${i} = ${base * i}${(i <= 9)? '\n':''}`
+    for (let i = 1; i <= hasta; i++) {
+        salida += `${base} x ${i} = ${base * i}${(i <= (hasta - 1))? '\n':''}`
     }
 
-    // Forma directa manejando el error con throw
-    // fs.writeFile(`tabla-${base}.txt`, salida, (err) => {
-    //     if (err) throw err;
+    if (listar) {
+        console.log('===========================')
+        console.log('  Creando la tabla del:', base)
+        console.log('===========================')
+        console.log(colors.yellow(salida), '\n')
+    }
 
-    //     console.log(`Archivo tabla-${base}.txt creado`)
-    // })
-
-    // Forma asincrona, se debe manejar con try y catch
     try {
-        fs.writeFileSync(`tabla-${base}.txt`, salida)
+        fs.writeFileSync(`./salida/tabla-${base}.txt`, salida)
         return `Archivo tabla-${base}.txt`
     } catch (err) {
         return err
@@ -31,5 +27,6 @@ const crearArchivo = async( base = 5) => {
 
 // Exportando como objeto con "module.exports"
 module.exports = {
-    crearArchivo
+    crearArchivo,
+    colors
 }
